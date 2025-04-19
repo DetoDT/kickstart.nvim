@@ -480,13 +480,15 @@ require('lazy').setup({
       { 'williamboman/mason.nvim', opts = {} },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'simrat39/rust-tools.nvim',
 
       -- Useful status updates for LSP.
       { 'j-hui/fidget.nvim', opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
-    },
+      },
+
     config = function()
       -- Brief aside: **What is LSP?**
       --
@@ -666,10 +668,10 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        clangd = {},
         -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
+        pyright = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -692,6 +694,17 @@ require('lazy').setup({
               -- diagnostics = { disable = { 'missing-fields' } },
             },
           },
+        },
+      }
+
+      -- Setup Rust Analyzer
+      local rt = require 'rust-tools'
+      rt.setup {
+        server = {
+          on_attach = function(_, bufnr)
+            -- Keybindings
+            vim.keymap.set('n', 'K', rt.hover_actions.hover_actions, { buffer = bufnr })
+          end,
         },
       }
 
@@ -889,7 +902,12 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-storm'
+      --vim.cmd.colorscheme 'tokyonight-storm'
+      -- Lua
+      require('onedark').setup {
+        style = 'cool',
+      }
+      require('onedark').load()
     end,
   },
 
@@ -968,11 +986,11 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
+  require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
@@ -1009,3 +1027,14 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Keymap to open Themery and choose theme
+vim.keymap.set('n', '<leader>tt', ':Themery<CR>', { desc = 'Change Theme' })
+
+-- Barbar
+local map = vim.api.nvim_set_keymap
+local opts = { noremap = true, silent = true }
+
+-- Move to previous/next
+map('n', '<S-h>', '<Cmd>BufferPrevious<CR>', opts)
+map('n', '<S-l>', '<Cmd>BufferNext<CR>', opts)
