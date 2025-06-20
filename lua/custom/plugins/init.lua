@@ -22,7 +22,6 @@ return {
   'navarasu/onedark.nvim',
   'simrat39/rust-tools.nvim',
   'mfussenegger/nvim-dap',
-  'nvim-orgmode/org-bullets.nvim',
   -- Debugger UI
   'David-Kunz/jester',
   'pocco81/dap-buddy.nvim',
@@ -37,39 +36,8 @@ return {
   --   dependencies = 'nvim-treesitter/nvim-treesitter',
   --   config = true, -- or `opts = {}`
   -- },
-  {
-    'nvim-orgmode/orgmode',
-    event = 'VeryLazy',
-    config = function()
-      -- Setup orgmode
-      require('orgmode').setup {
-        org_agenda_files = '~/orgfiles/**/*',
-        org_default_notes_file = '~/orgfiles/refile.org',
-      }
-    end,
-  },
-  {
-    'chipsenkbeil/org-roam.nvim',
-    tag = '0.1.1',
-    dependencies = {
-      {
-        'nvim-orgmode/orgmode',
-        tag = '0.3.7',
-      },
-    },
-    config = function()
-      require('org-roam').setup {
-        directory = '~/org_roam_files',
-        -- optional
-        org_files = {
-          '~/another_org_dir',
-          '~/some/folder/*.org',
-          '~/a/single/org_file.org',
-        },
-      }
-    end,
-  },
-  {
+  
+   {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
